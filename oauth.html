@@ -1,0 +1,13 @@
+wait a moment
+<script src="js/client.js"></script>
+<script>
+(async () => {
+	let masto = new Mastodon();
+
+	let code = (new URLSearchParams(window.location.search)).get('code');
+	if (code) {
+		await masto.oauth_token(code);
+	}
+	window.location = 'index.html';
+})();
+</script>

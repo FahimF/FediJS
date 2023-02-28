@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>MastoBite</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/font-awesome.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row flex-nowrap">
+			<div class="col sidebar fixed-top">
+				<div class="dropdown pb-4">
+					<a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+						<img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+					</a>
+					<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+						<li><a class="dropdown-item" href="#">Add Account...</a></li>
+						<li><a class="dropdown-item" href="#">Settings</a></li>
+						<li><a class="dropdown-item" href="#">Profile</a></li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li><a class="dropdown-item" href="#">Logout</a></li>
+					</ul>
+				</div>
+				<ul class="nav nav-pills align-items-center" id="menu">
+					<li class="nav-item">
+						<a href="#" id="n_timeline" class="nav-link" onclick="switchTab(Mastodon.Tabs.Home);" data-bs-toggle="tooltip" data-bs-title="Home">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-house-door" viewBox="0 0 16 16">
+								<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" id="n_notifs" class="nav-link" onclick="switchTab(Mastodon.Tabs.Notifications);" data-bs-toggle="tooltip" data-bs-title="Notifications">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+								<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" id="n_mentions" class="nav-link" onclick="switchTab(Mastodon.Tabs.Mentions);" data-bs-toggle="tooltip" data-bs-title="Mentions">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-at" viewBox="0 0 16 16">
+								<path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" id="n_messages" class="nav-link" onclick="switchTab(Mastodon.Tabs.DM);" data-bs-toggle="tooltip" data-bs-title="DMs">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+								<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" id="n_favourites" class="nav-link" onclick="switchTab(Mastodon.Tabs.Favourites);" data-bs-toggle="tooltip" data-bs-title="Favourites">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+								<path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" id="n_bookmarks" class="nav-link" onclick="switchTab(Mastodon.Tabs.Bookmarks);" data-bs-toggle="tooltip" data-bs-title="Bookmarks">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
+								<path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+							</svg>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" id="n_settings" class="nav-link" onclick="switchTab(Mastodon.Tabs.Settings);" data-bs-toggle="tooltip" data-bs-title="Settings">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+								<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+								<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col content">
+				<div class="banner">
+					<i class="fa-solid fa-drumstick-bite fa-3x" style="color: var(--banner-fill);"></i>
+					<h1 class="title">MastoBite</h1>
+				</div>
+				<hr />
+				<div id="status"></div>
+				<script src="js/client.js"></script>
+				<script src="js/helper.js"></script>
+				<!-- Login section -->
+				<div id="login" style="display: none;">
+					<center>
+						<h2 class="sub">Log into Mastodon</h2>
+						<hr/>
+						<form action="#">
+							<div class="row">
+								<div class="col"></div>
+								<div class="col-auto">
+									<label for="instance" class="form-label">Your instance:</label>
+								</div>
+								<div class="col-auto">
+									<input id="instance" class="form-control" placeholder="sigmoid.social">
+								</div>
+								<div class="col-auto">
+									<button id="login-btn" class="btn btn-primary">Login</button>
+								</div>
+								<div class="col"></div>
+							</div>
+						</form>
+					</center>
+				</div>
+				<!-- Timeline section -->
+				<div id="timeline" style="display: none;">
+					<h2 class="sub">Timeline</h2>
+				</div>
+				<!-- Notifications section -->
+				<div id="notifs" style="display: none;">
+					<h2 class="sub">Notifications</h2>
+				</div>
+				<!-- Mentions section -->
+				<div id="mentions" style="display: none;">
+					<h2 class="sub">Mentions</h2>
+				</div>
+				<!-- DMs section -->
+				<div id="messages" style="display: none;">
+					<h2 class="sub">Direct Messages</h2>
+				</div>
+				<!-- Favrourites section -->
+				<div id="favourites" style="display: none;">
+					<h2 class="sub">Favourites</h2>
+				</div>
+				<!-- Bookmarks section -->
+				<div id="bookmarks" style="display: none;">
+					<h2 class="sub">Bookmarks</h2>
+				</div>
+				<!-- Settings section -->
+				<div id="settings" style="display: none;">
+					<h2 class="sub">Settings</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		switchTab();
+
+		// Set up values
+		let input = document.getElementById('instance');
+		if (localStorage.instance) {
+			input.value = localStorage.instance;
+		}
+
+		// Enable tooltips
+		const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+		// Handle login
+		document.getElementById('login-btn').onclick = async () => {
+			localStorage.instance = input.value;
+			try {
+				console.log('Going for OAuth');
+				await masto.oauth_login();
+				var item = document.getElementById("login");
+				showItem(item, false);
+				item = document.getElementById("timeline");
+				showItem(item, true);
+			} catch (e) {
+				console.log(e);
+				alert("Hmm, that doesn't seem like a valid instance");
+			}
+		};
+	</script>
+</body>
+</html>
