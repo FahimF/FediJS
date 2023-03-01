@@ -10,7 +10,7 @@ const tabData = {[Mastodon.Tabs.Home]: {}, [Mastodon.Tabs.Notifications]: {}, [M
 
 function switchTab(tab = Mastodon.Tabs.Default) {
 	// If not logged in, we have to login
-	if (!localStorage.instance || !localStorage.access_token) {
+	if (!localStorage.server_url || !localStorage.access_token) {
 		// Show login section
 		showItem("login", true);
 		return;
@@ -67,7 +67,7 @@ function showTimeline(tab, tid) {
 
 		// Get a page via API call
 		async function getPage(max_id = null) {
-			let opts = {limit: 100};
+			let opts = {limit: 40};
 			if (max_id) {
 				opts.max_id = max_id;
 			}
@@ -90,11 +90,12 @@ function showTimeline(tab, tid) {
 			if (posts.length > 0) {
 				max_id = posts[posts.length - 1].id;
 			}
-			if ((!idTarget || max_id > idTarget) && posts.length > 0) {
-				await getPage(max_id);
-			} else {
+			// TODO: Look at this logic more closely, currently it keeps loading more items indefinitely
+			// if ((idTarget.length > 0 || max_id > idTarget) && posts.length > 0) {
+			// 	await getPage(max_id);
+			// } else {
 				showStatus(`Have ${listIDs.length}, done for now.`);
-			}
+			// }
 		}
 
 		getPage().catch((e) => {

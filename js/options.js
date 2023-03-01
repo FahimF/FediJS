@@ -17,7 +17,7 @@ function input_localStorage(iId, bId, lId) {
 	updateDirty();
 }
 
-input_localStorage('instance', 'instance-btn', 'instance');
+input_localStorage('server_url', 'server_url-btn', 'server_url');
 input_localStorage('token', 'token-btn', 'access_token');
 
 document.getElementById('oauth-btn').onclick = (async () => {

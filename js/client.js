@@ -21,16 +21,16 @@ class Mastodon {
 		}
 		Mastodon.#shared = this;
 		console.log('Created new Mastodon Client');
-		let instance = localStorage.instance;
-		if (instance.indexOf('://') == -1) {
-			instance = 'https://' + instance;
+		var url = localStorage.server_url;
+		if (url.indexOf('://') == -1) {
+			url = 'https://' + url;
 		}
-		this.instance = instance;
+		this.server_url = url;
 		this.token = localStorage.access_token;
 	}
 
 	async get(endpoint, options) {
-		let url = this.instance + endpoint + '?' + new URLSearchParams(options);
+		let url = this.server_url + endpoint + '?' + new URLSearchParams(options);
 		const res = await fetch(url, {
 			headers: {
 				'Authorization': 'Bearer ' + this.token,
@@ -46,7 +46,7 @@ class Mastodon {
 	async post(endpoint, body) {
 		const fd = new FormData();
 		for (let key in body) fd.append(key, body[key]);
-		const res = await fetch(this.instance + endpoint, {
+		const res = await fetch(this.server_url + endpoint, {
 			method: 'POST',
 			body: fd,
 		});
@@ -57,13 +57,13 @@ class Mastodon {
 		let redir = window.location.href;
 		redir = redir.substring(0, redir.lastIndexOf('/')) + '/oauth.html';
 		let res = await this.post('/api/v1/apps', {
-			client_name: 'MastoBite',
+			client_name: 'FediJS',
 			redirect_uris: redir,
 			scopes: 'read',
-			website: 'https://github.com/FahimF/MastoBite',
+			website: 'https://github.com/FahimF/FediJS',
 		});
 		localStorage.oauth = JSON.stringify(res);
-		window.location = this.instance + '/oauth/authorize?' + new URLSearchParams({
+		window.location = this.server_url + '/oauth/authorize?' + new URLSearchParams({
 			client_id: res.client_id,
 			scope: 'read',
 			redirect_uri: redir,

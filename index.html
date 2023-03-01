@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>MastoBite</title>
+	<title>FediJS</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/main.css">
 	<script src="js/font-awesome.js"></script>
@@ -83,7 +83,7 @@
 			<div class="col content">
 				<div class="banner">
 					<i class="fa-solid fa-drumstick-bite fa-3x" style="color: var(--banner-fill);"></i>
-					<h1 class="title">MastoBite</h1>
+					<h1 class="title">FediJS</h1>
 				</div>
 				<hr />
 				<div id="status"></div>
@@ -98,10 +98,10 @@
 							<div class="row">
 								<div class="col"></div>
 								<div class="col-auto">
-									<label for="instance" class="form-label">Your instance:</label>
+									<label for="server_url" class="form-label">Your server URL:</label>
 								</div>
 								<div class="col-auto">
-									<input id="instance" class="form-control" placeholder="sigmoid.social">
+									<input id="server_url" class="form-control" placeholder="sigmoid.social">
 								</div>
 								<div class="col-auto">
 									<button id="login-btn" class="btn btn-primary">Login</button>
@@ -146,9 +146,9 @@
 		switchTab();
 
 		// Set up values
-		let input = document.getElementById('instance');
-		if (localStorage.instance) {
-			input.value = localStorage.instance;
+		let input = document.getElementById('server_url');
+		if (localStorage.server_url) {
+			input.value = localStorage.server_url;
 		}
 
 		// Enable tooltips
@@ -157,7 +157,7 @@
 
 		// Handle login
 		document.getElementById('login-btn').onclick = async () => {
-			localStorage.instance = input.value;
+			localStorage.server_url = input.value;
 			try {
 				console.log('Going for OAuth');
 				await masto.oauth_login();
@@ -167,7 +167,7 @@
 				showItem(item, true);
 			} catch (e) {
 				console.log(e);
-				alert("Hmm, that doesn't seem like a valid instance");
+				alert("Hmm, that doesn't seem like a valid Fedi server?");
 			}
 		};
 	</script>
