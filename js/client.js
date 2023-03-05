@@ -49,6 +49,9 @@ class Mastodon {
 		const res = await fetch(this.server_url + endpoint, {
 			method: 'POST',
 			body: fd,
+			headers: {
+				'Authorization': 'Bearer ' + this.token,
+			},
 		});
 		return res.json();
 	}
@@ -59,13 +62,13 @@ class Mastodon {
 		let res = await this.post('/api/v1/apps', {
 			client_name: 'FediJS',
 			redirect_uris: redir,
-			scopes: 'read',
+			scopes: 'read write',
 			website: 'https://github.com/FahimF/FediJS',
 		});
 		localStorage.oauth = JSON.stringify(res);
 		window.location = this.server_url + '/oauth/authorize?' + new URLSearchParams({
 			client_id: res.client_id,
-			scope: 'read',
+			scope: 'read write',
 			redirect_uri: redir,
 			response_type: 'code'
 		});
@@ -79,7 +82,7 @@ class Mastodon {
 			redirect_uri: oauth.redirect_uri,
 			grant_type: 'authorization_code',
 			code: code,
-			scope: 'read',
+			scope: 'read write',
 		});
 		localStorage.access_token = res.access_token;
 	}
@@ -115,5 +118,29 @@ class Mastodon {
 		}
 		opts['exclude_types[]'] = 'mention';
 		return this.get(`/api/v1/notifications`, opts);
+	}
+
+	async bookmark(postID) {
+		return this.post(`/api/v1/statuses/${postID}/bookmark`);
+	}
+
+	async removeBookmark(postID) {
+		return this.post(`/api/v1/statuses/${postID}/unbookmark`);
+	}
+
+	async boost(postID) {
+		return this.post(`/api/v1/statuses/${postID}/reblog`);
+	}
+
+	async removeBoost(postID) {
+		return this.post(`/api/v1/statuses/${postID}/unreblog`);
+	}
+
+	async favourite(postID) {
+		return this.post(`/api/v1/statuses/${postID}/favourite`);
+	}
+
+	async removeFavourite(postID) {
+		return this.post(`/api/v1/statuses/${postID}/unfavourite`);
 	}
 }

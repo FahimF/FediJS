@@ -24,7 +24,7 @@
 						<li>
 							<hr class="dropdown-divider">
 						</li>
-						<li><a class="dropdown-item" href="#">Logout</a></li>
+						<li><a id="btn-logout" class="dropdown-item" href="#">Logout</a></li>
 					</ul>
 				</div>
 				<ul class="nav nav-pills align-items-center" id="menu">
@@ -104,7 +104,7 @@
 									<input id="server_url" class="form-control" placeholder="sigmoid.social">
 								</div>
 								<div class="col-auto">
-									<button id="login-btn" class="btn btn-primary">Login</button>
+									<button id="btn-login" class="btn btn-primary">Login</button>
 								</div>
 								<div class="col"></div>
 							</div>
@@ -156,7 +156,7 @@
 		const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 		// Handle login
-		document.getElementById('login-btn').onclick = async () => {
+		document.getElementById('btn-login').onclick = async () => {
 			localStorage.server_url = input.value;
 			try {
 				console.log('Going for OAuth');
@@ -169,6 +169,21 @@
 				console.log(e);
 				alert("Hmm, that doesn't seem like a valid Fedi server?");
 			}
+		};
+
+		// Handle logout
+		document.getElementById('btn-logout').onclick = async () => {
+			console.log('Logging out ...');
+			localStorage.removeItem('server_url');
+			localStorage.removeItem('access_token');
+			// Disable current tab
+			let ptab = localStorage.currentTab
+			let tid = tabIDs[ptab];
+			showItem(tid, false);
+			// Remove active status from tab
+			toggleActive("n_" + tid, false);
+			// Show login section
+			showItem("login", true);
 		};
 	</script>
 </body>

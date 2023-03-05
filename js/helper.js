@@ -275,46 +275,48 @@ function createPostCard(post, card) {
 	card.innerHTML += post.content;
 	// Do we have images?
 	let cnt = post.media_attachments.length;
-	if (cnt == 0) {
-		return card;
+	if (cnt > 0) {
+		// We have images, add main gallery DIV
+		let gal = createElementObj('div', {classList: 'media-gallery'});
+		// Get HTML for items
+		let cid = `image-carousel-${post.id}`;
+		html = `<div id="${cid}" class="carousel">`;
+		let ind = `<div class="carousel-indicators">`;
+		let cin = `<div class="carousel-inner">`;
+		for (const [ndx, m] of post.media_attachments.entries()) {
+			ind += `<button type="button" data-bs-target="#${cid}" data-bs-slide-to="${ndx}" class="${ndx == 0 ? 'active' : ''}" aria-current="${ndx == 0 ? 'true' : ''}" aria-label="Slide ${ndx + 1}"></button>`;
+			cin +=`<div class="carousel-item ${ndx == 0 ? 'active' : ''}">`;
+			cin += `<a class="media-item-thumbnail" href="${m.url}" target="_blank" rel="noopener noreferrer">`;
+			cin += `<img src="${m.preview_url}" class="d-block w-100" alt="${m.description}" title="${m.description}" />`;
+			cin += "</a></div>";
+		}
+		ind += `</div>`;
+		cin += `</div>`
+		// Previous button
+		cin += `<button class="carousel-control-prev" type="button" data-bs-target="#${cid}" data-bs-slide="prev">`;
+		cin += `<span class="carousel-control-prev-icon" aria-hidden="true"></span>`;
+		cin += `<span class="visually-hidden">Previous</span>`;
+		cin += `</button>`;
+		// Next button
+		cin += `<button class="carousel-control-next" type="button" data-bs-target="#${cid}" data-bs-slide="next">`;
+		cin += `<span class="carousel-control-next-icon" aria-hidden="true"></span>`;
+		cin += `<span class="visually-hidden">Next</span>`;
+		cin += `</button>`;
+		// Put it all together
+		html += ind + cin + `</div>`;
+		gal.innerHTML = html;
+		card.appendChild(gal);
 	}
-	// We have images, add main gallery DIV
-	let gal = createElementObj('div', {classList: 'media-gallery'});
-	// Get HTML for items
-	let cid = `image-carousel-${post.id}`;
-	html = `<div id="${cid}" class="carousel">`;
-	let ind = `<div class="carousel-indicators">`;
-	let cin = `<div class="carousel-inner">`;
-	for (const [ndx, m] of post.media_attachments.entries()) {
-		ind += `<button type="button" data-bs-target="#${cid}" data-bs-slide-to="${ndx}" class="${ndx == 0 ? 'active' : ''}" aria-current="${ndx == 0 ? 'true' : ''}" aria-label="Slide ${ndx + 1}"></button>`;
-		cin +=`<div class="carousel-item ${ndx == 0 ? 'active' : ''}">`;
-		cin += `<a class="media-item-thumbnail" href="${m.url}" target="_blank" rel="noopener noreferrer">`;
-		cin += `<img src="${m.preview_url}" class="d-block w-100" alt="${m.description}" title="${m.description}" />`;
-		cin += "</a></div>";
-	}
-	ind += `</div>`;
-	cin += `</div>`
-	// Previous button
-	cin += `<button class="carousel-control-prev" type="button" data-bs-target="#${cid}" data-bs-slide="prev">`;
-	cin += `<span class="carousel-control-prev-icon" aria-hidden="true"></span>`;
-	cin += `<span class="visually-hidden">Previous</span>`;
-	cin += `</button>`;
-	// Next button
-	cin += `<button class="carousel-control-next" type="button" data-bs-target="#${cid}" data-bs-slide="next">`;
-	cin += `<span class="carousel-control-next-icon" aria-hidden="true"></span>`;
-	cin += `<span class="visually-hidden">Next</span>`;
-	cin += `</button>`;
-	// Put it all together
-	html += ind + cin + `</div>`;
-	gal.innerHTML = html;
-	card.appendChild(gal);
 	// Actions
 	let act = createElementObj('div', {classList: 'post-actions'});
 	html = `<div class="hstack gap-3">`;
-	html += `<button type="button" class="btn btn-light btn-sm">Reply</button>`;
-	html += `<button type="button" class="btn btn-light btn-sm">Boost</button>`;
-	html += `<button type="button" class="btn btn-light btn-sm">Favourite</button>`;
-	html += `<button type="button" class="btn btn-light btn-sm">Bookmark</button>`;
+	html += `<button id='btn-rpl-${post.id}' type="button" class="btn btn-light btn-sm" onClick="replyClicked('${post.id}');">Reply</button>`;
+	title = post.reblogged ? 'Unboost' : 'Boost';
+	html += `<button id='btn-bst-${post.id}' type="button" class="btn btn-light btn-sm" onClick="boostClicked('${post.id}', ${post.reblogged});">${title}</button>`;
+	title = post.favourited ? 'Unfavourite' : 'Favourite';
+	html += `<button id='btn-fav-${post.id}' type="button" class="btn btn-light btn-sm" onClick="favouriteClicked('${post.id}', ${post.favourited});">${title}</button>`;
+	title = post.bookmarked ? 'Unbookmark' : 'Bookmark';
+	html += `<button id='btn-bkm-${post.id}' type="button" class="btn btn-light btn-sm" onClick="bookmarkClicked('${post.id}', ${post.bookmarked});">${title}</button>`;
 	html += `</div>`;
 	act.innerHTML = html;
 	card.appendChild(act);
@@ -347,6 +349,71 @@ function createAccountCard(acct, card) {
 	`at: ${dt_str}`;
 	card.appendChild(boost);
 	return card;
+}
+
+function replyClicked(postID) {
+	alert("Reply not yet implemented.\nPost: " + postID);
+}
+
+async function boostClicked(postID, boosted) {
+	if (boosted) {
+		post = await masto.removeBoost(postID);
+	} else {
+		post = await masto.boost(postID);
+	}
+	if (post.error) {
+		alert(post.error);
+		return;
+	}
+	update(post);
+	btn = document.getElementById(`btn-bst-${postID}`);
+	if (btn) {
+		btn.textContent = post.boosted ? 'Unboost' : 'Boost';
+	}
+}
+
+async function favouriteClicked(postID, favourited) {
+	if (favourited) {
+		post = await masto.removeFavourite(postID);
+	} else {
+		post = await masto.Favourite(postID);
+	}
+	if (post.error) {
+		alert(post.error);
+		return;
+	}
+	update(post);
+	btn = document.getElementById(`btn-fav-${postID}`);
+	if (btn) {
+		btn.textContent = post.favourited ? 'Unfavourite' : 'Favourite';
+	}
+}
+
+async function bookmarkClicked(postID, bookmarked) {
+	if (bookmarked) {
+		post = await masto.removeBookmark(postID);
+	} else {
+		post = await masto.bookmark(postID);
+	}
+	if (post.error) {
+		alert(post.error);
+		return;
+	}
+	update(post);
+	btn = document.getElementById(`btn-bkm-${postID}`);
+	if (btn) {
+		btn.textContent = post.bookmarked ? 'Unbookmark' : 'Bookmark';
+	}
+}
+
+function update(post) {
+	tab = localStorage.currentTab;
+	let tid = tabIDs[tab];
+	tabData[tab][post.id] = post;
+	// Update data storage
+	let json = tabData[tab];
+	let str = JSON.stringify(json);
+	localStorage.setItem(tid, str);
 }
 
 Date.prototype.addDays = function(days) {
